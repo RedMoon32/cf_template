@@ -10,11 +10,11 @@ Sets up fast input/output
 
 Provides common type aliases (e.g., ll, pii, vi)
 
-Allows reading from in.txt and writing to out.txt if arguments are passed during execution
+**Allows reading from in.txt and writing to out.txt** if arguments are passed during execution
 
 ## Usage
 
-## Generating a C++ Template
+### Generating a C++ Template
 
 Run the Python script to generate a new .cpp file:
 
@@ -24,7 +24,7 @@ Enter the task name: A_plus_B
 File 'A_plus_B.cpp' was successfully created!
 ```
 
-This will create a file named A_plus_B.cpp with the C++ template.
+This will create a file named hello_cf.cpp with the C++ template.
 
 Example Compilation and Execution
 
@@ -33,14 +33,14 @@ After generating the C++ file, compile and run it with the following commands:
 ## Compile the C++ file
 
 ```
-$ g++ -o A_plus_B A_plus_B.cpp -std=c++17
+$ g++ -o hello_cf hello_cf.cpp -std=c++17
 ```
 
 
 ## Run the executable
 
 ```
-$ ./A_plus_B < in.txt > out.txt
+$ ./hello_cf < in.txt > out.txt
 
 -o A_plus_B specifies the output executable name.
 
