@@ -28,7 +28,7 @@ File 'hello_cf.cpp' was successfully created!
 
 This will create a file named hello_cf.cpp with the C++ template.
 
-Example Compilation and Execution
+### Example Compilation and Execution
 
 After generating the C++ file, compile and run it with the following commands:
 
