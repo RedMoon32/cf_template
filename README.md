@@ -61,10 +61,10 @@ Includes fast I/O setup, common types, and utility functions.
 
 ## Requirements
 
-Python 3.x
 
 ```
-g++ (GNU C++ Compiler)
+Python 3.x
+g++ (GNU C++ Compiler) or any other cpp compiler
 ```
 
 Contributing
