@@ -16,7 +16,9 @@ The script creates a new .cpp file with boilerplate code that:
 
 ### Generating a C++ Template
 
-Run the Python script to generate a new .cpp file:
+1. Just copy the main.py file content to you!
+
+2. Run the Python script to generate a new .cpp file:
 
 ```
 $ python3 main.py
