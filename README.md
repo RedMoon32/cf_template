@@ -18,9 +18,11 @@ Allows reading from in.txt and writing to out.txt if arguments are passed during
 
 Run the Python script to generate a new .cpp file:
 
+```
 $ python3 main.py
 Enter the task name: A_plus_B
 File 'A_plus_B.cpp' was successfully created!
+```
 
 This will create a file named A_plus_B.cpp with the C++ template.
 
@@ -29,14 +31,21 @@ Example Compilation and Execution
 After generating the C++ file, compile and run it with the following commands:
 
 ## Compile the C++ file
+
+```
 $ g++ -o A_plus_B A_plus_B.cpp -std=c++17
+```
+
 
 ## Run the executable
+
+```
 $ ./A_plus_B < in.txt > out.txt
 
 -o A_plus_B specifies the output executable name.
 
 -std=c++17 ensures compatibility with C++17.
+```
 
 Input is read from in.txt and output is written to out.txt.
 
@@ -56,7 +65,9 @@ Includes fast I/O setup, common types, and utility functions.
 
 Python 3.x
 
+```
 g++ (GNU C++ Compiler)
+```
 
 Contributing
 
