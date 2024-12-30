@@ -18,8 +18,8 @@ void setIO(int argc, char* argv[]) {
 
 
 #define ALL(v) v.begin(),v.end()
-#define first_eg(v, i) lower_bound(ALL(v), i)
-#define first_g(v, i) upper_bound(ALL(v), i)
+#define LB(v, i) lower_bound(ALL(v), i)
+#define UB(v, i) upper_bound(ALL(v), i)
 
 // Data types for convenience
 typedef long long ll;
@@ -31,6 +31,22 @@ typedef vector<pii> vpii;
 typedef vector<vector<int>> vvi;
 typedef vector<vector<ll>> vvl; 
 typedef set<int> seti;
+
+template <class T> 
+using pqueue = priority_queue<T, vector<T>, greater<T>>;
+
+// Iteration
+#define RANGE(i, a, b) for (int i = (a); i < (b); ++i)
+#define F0R(i, a) FOR(i, 0, a)
+#define ROF(i, a, b) for (int i = (b)-1; i >= (a); --i)
+#define R0F(i, a) ROF(i, 0, a)
+
+// helpers
+template<typename T>
+bool even(T& val) { return val % 2 == 0;}
+
+template<typename T>
+bool odd(T& val) { return !even(val); }
 
 template<typename T>
 vector<T> readvt(int n)
