@@ -89,9 +89,6 @@ seti getseti(vi& v) {
     if include_segment_tree:
         cpp_code += R"""
 template<typename T>
-using NodePtr = std::unique_ptr<Node<T>>;
-
-template<typename T>
 struct Node
 {
     T max = std::numeric_limits<T>::min();
@@ -102,6 +99,9 @@ struct Node
     std::unique_ptr<Node<T>> left = nullptr;
     std::unique_ptr<Node<T>> right = nullptr;
 };
+
+template<typename T>
+using NodePtr = std::unique_ptr<Node<T>>;
 
 template<typename T>
 using NodePtr = std::unique_ptr<Node<T>>;
