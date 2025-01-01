@@ -1,8 +1,3 @@
-import os
-
-# Function to create a .cpp file with a code template
-def generate_cpp_file(task_name, include_segment_tree=False):
-    cpp_code = R"""
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -83,11 +78,7 @@ seti getseti(vi& v) {
     return res;
 }
 
-""" 
 
-    # Segment Tree code if needed
-    if include_segment_tree:
-        cpp_code += R"""
 template<typename T>
 using NodePtr = std::unique_ptr<Node<T>>;
 
@@ -233,9 +224,7 @@ private:
         return leftSum + rightSum;
     }
 };
-"""
-        
-    cpp_code += """
+
 // your solution here
 void solution()
 {
@@ -259,22 +248,3 @@ int main(int argc, char* argv[]) {
     }
     return 0;
 }
-"""
-    
-    # Create a file with the specified name
-    file_name = f"{task_name}.cpp"
-    with open(file_name, "w") as f:
-        f.write(cpp_code.strip())
-
-    print(f"File '{file_name}' was successfully created! compile and run: ")
-    print(f"g++ -g {file_name} && ./a.out -stub")
-
-# Main function to get the task name and whether to include segment tree
-if __name__ == "__main__":
-    task_name = input("Enter the task name: ")
-    include_segment_tree = input("Need to include advanced algos (segment trees/..): (y/n, default n - just skip enter) ").strip().lower()
-    if include_segment_tree == '' or include_segment_tree == 'n':
-        include_segment_tree = False
-    else:
-        include_segment_tree = True
-    generate_cpp_file(task_name, include_segment_tree)

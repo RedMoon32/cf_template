@@ -6,27 +6,27 @@ This repository contains a Python script to generate a simple C++ template for c
 
 The script creates a new .cpp file with boilerplate code that:
 
-* Sets up fast input/output
-
-* Provides common type aliases (e.g., ll, pii, vi)
-
-* **Allows reading from in.txt and writing to out.txt** if arguments are passed during execution
+- Sets up fast input/output
+- Provides common type aliases (e.g., ll, pii, vi)
+- **Allows reading from in.txt and writing to out.txt** if arguments are passed during execution
+- Optionally includes **advanced algorithms like segment trees** based on user input.
 
 ## Usage
 
 ### Generating a C++ Template
 
-1. Just copy the main.py file content to you!
+1. Just copy the `main.py` file content to your local environment.
 
 2. Run the Python script to generate a new .cpp file:
 
 ```
 $ python3 main.py
 Enter the task name: hello_cf
+Need to include advanced algos (segment trees/..): (y/n, default n - just skip enter)
 File 'hello_cf.cpp' was successfully created!
 ```
 
-This will create a file named hello_cf.cpp with the C++ template.
+This will create a file named `hello_cf.cpp` with the C++ template.
 
 ### Example Compilation and Execution
 
@@ -38,38 +38,33 @@ After generating the C++ file, compile and run it with the following commands:
 $ g++ -o hello_cf hello_cf.cpp -std=c++17
 ```
 
-
 ## Run the executable
 
 ```
 $ ./hello_cf -stub -o hello_cf
 ```
 
--o hello_cf specifies the output executable name.
--std=c++17 ensures compatibility with C++17.
--stub - Input is read from in.txt and output is written to out.txt.
+- `-o hello_cf` specifies the output executable name.
+- `-std=c++17` ensures compatibility with C++17.
+- `-stub` directs the program to read from `in.txt` and write to `out.txt`.
 
 ## How It Works
 
-File Redirection: If the C++ program is run with command-line arguments (e.g., ./hello_cf 1), the program redirects input from in.txt and output to out.txt.
+File Redirection: If the C++ program is run with command-line arguments (e.g., `./hello_cf 1`), the program redirects input from `in.txt` and output to `out.txt`.
 
 Without Arguments: Standard input and output are used (ideal for local testing).
 
 ## Why Use This?
 
-Saves time by automating the creation of a consistent starting point for each problem.
-
-Includes fast I/O setup, common types, and utility functions.
+- Saves time by automating the creation of a consistent starting point for each problem.
+- Includes fast I/O setup, common types, and utility functions.
+- Allows for easy inclusion of advanced algorithms like segment trees when needed.
 
 ## Requirements
 
+- Python 3.x
+- g++ (GNU C++ Compiler) or any other C++ compiler
 
-```
-Python 3.x
-g++ (GNU C++ Compiler) or any other cpp compiler
-```
-
-Contributing
+## Contributing
 
 Feel free to fork this repository and submit pull requests for improvements or additional features!
-
