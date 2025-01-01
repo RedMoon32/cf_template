@@ -95,9 +95,6 @@ template<typename T>
 using NodePtr = std::unique_ptr<Node<T>>;
 
 template<typename T>
-using NodePtr = std::unique_ptr<Node<T>>;
-
-template<typename T>
 class SegmentTree {
 public:
     SegmentTree(int l, int r) {
