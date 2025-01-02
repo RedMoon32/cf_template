@@ -79,145 +79,140 @@ seti getseti(vi& v) {
 }
 
 
+#include <bits/stdc++.h>
+#include <limits>
+
 template<typename T>
 struct Node
 {
     T max = std::numeric_limits<T>::min();
     T min = std::numeric_limits<T>::max();
     T sum = 0;
-    int l = 0;
-    int r = 0;
-    std::unique_ptr<Node<T>> left = nullptr;
-    std::unique_ptr<Node<T>> right = nullptr;
 };
-
-template<typename T>
-using NodePtr = std::unique_ptr<Node<T>>;
 
 template<typename T>
 class SegmentTree {
 public:
-    SegmentTree(int l, int r) {
-        root = buildTree(l, r);
+    SegmentTree(const std::vector<T>& data) {
+        n = data.size();
+        tree.resize(4 * n, Node<T>());
+        buildTree(data, 0, 0, n - 1);
     }
 
     void update(int index, T value) {
-        updatePath(root, index, value);
+        updatePath(0, 0, n - 1, index, value);
     }
 
-    T getMax(int from, int to) {
-        return getMax(root, from, to);
+    T getMax(int from, int to) const {
+        return getMaxQuery(0, 0, n - 1, from, to);
     }
 
-    T getMin(int from, int to) {
-        return getMin(root, from, to);
+    T getMin(int from, int to) const {
+        return getMinQuery(0, 0, n - 1, from, to);
     }
 
-    T getSum(int from, int to) {
-        return getSum(root, from, to);
+    T getSum(int from, int to) const {
+        return getSumQuery(0, 0, n - 1, from, to);
     }
 
 private:
-    NodePtr<T> root;
+    std::vector<Node<T>> tree;
+    int n;
 
-    NodePtr<T> buildTree(int l, int r) {
-        if (l > r) {
-            return nullptr;
-        }
-        auto node = std::make_unique<Node<T>>();
-        node->l = l;
-        node->r = r;
-        
+    void buildTree(const std::vector<T>& data, int node, int l, int r) {
         if (l == r) {
-            return node;
+            tree[node].max = data[l];
+            tree[node].min = data[l];
+            tree[node].sum = data[l];
+            return;
         }
 
         int mid = l + (r - l) / 2;
-        node->left = buildTree(l, mid);
-        node->right = buildTree(mid + 1, r);
-        return node;
+        int leftChild = 2 * node + 1;
+        int rightChild = 2 * node + 2;
+
+        buildTree(data, leftChild, l, mid);
+        buildTree(data, rightChild, mid + 1, r);
+
+        tree[node].max = std::max(tree[leftChild].max, tree[rightChild].max);
+        tree[node].min = std::min(tree[leftChild].min, tree[rightChild].min);
+        tree[node].sum = tree[leftChild].sum + tree[rightChild].sum;
     }
 
-    void updatePath(NodePtr<T>& current, int index, T value) {
-        if (current == nullptr) {
+    void updatePath(int node, int l, int r, int index, T value) {
+        if (l == r) {
+            tree[node].max = value;
+            tree[node].min = value;
+            tree[node].sum = value;
             return;
         }
 
-        if (current->r < index || current->l > index) {
-            return;
+        int mid = l + (r - l) / 2;
+        int leftChild = 2 * node + 1;
+        int rightChild = 2 * node + 2;
+
+        if (index <= mid) {
+            updatePath(leftChild, l, mid, index, value);
+        } else {
+            updatePath(rightChild, mid + 1, r, index, value);
         }
 
-        if (current->l == current->r && current->l == index) {
-            current->max = value;
-            current->min = value;
-            current->sum = value;
-            return;
-        }
-
-        updatePath(current->left, index, value);
-        updatePath(current->right, index, value);
-
-        auto& left = current->left;
-        auto& right = current->right;
-
-        current->max = std::max(left ? left->max : std::numeric_limits<T>::min(),
-                                right ? right->max : std::numeric_limits<T>::min());
-        current->min = std::min(left ? left->min : std::numeric_limits<T>::max(),
-                                right ? right->min : std::numeric_limits<T>::max());
-        current->sum = (left ? left->sum : 0) + (right ? right->sum : 0);
+        tree[node].max = std::max(tree[leftChild].max, tree[rightChild].max);
+        tree[node].min = std::min(tree[leftChild].min, tree[rightChild].min);
+        tree[node].sum = tree[leftChild].sum + tree[rightChild].sum;
     }
 
-    T getMax(const NodePtr<T>& current, int from, int to) {
-        if (current == nullptr) {
+    T getMaxQuery(int node, int l, int r, int from, int to) const {
+        if (to < l || from > r) {
             return std::numeric_limits<T>::min();
         }
 
-        if (current->r < from || current->l > to) {
-            return std::numeric_limits<T>::min();
+        if (from <= l && r <= to) {
+            return tree[node].max;
         }
 
-        if (current->l >= from && current->r <= to) {
-            return current->max;
-        }
+        int mid = l + (r - l) / 2;
+        int leftChild = 2 * node + 1;
+        int rightChild = 2 * node + 2;
 
-        T leftMax = getMax(current->left, from, to);
-        T rightMax = getMax(current->right, from, to);
+        T leftMax = getMaxQuery(leftChild, l, mid, from, to);
+        T rightMax = getMaxQuery(rightChild, mid + 1, r, from, to);
         return std::max(leftMax, rightMax);
     }
 
-    T getMin(const NodePtr<T>& current, int from, int to) {
-        if (current == nullptr) {
+    T getMinQuery(int node, int l, int r, int from, int to) const {
+        if (to < l || from > r) {
             return std::numeric_limits<T>::max();
         }
 
-        if (current->r < from || current->l > to) {
-            return std::numeric_limits<T>::max();
+        if (from <= l && r <= to) {
+            return tree[node].min;
         }
 
-        if (current->l >= from && current->r <= to) {
-            return current->min;
-        }
+        int mid = l + (r - l) / 2;
+        int leftChild = 2 * node + 1;
+        int rightChild = 2 * node + 2;
 
-        T leftMin = getMin(current->left, from, to);
-        T rightMin = getMin(current->right, from, to);
+        T leftMin = getMinQuery(leftChild, l, mid, from, to);
+        T rightMin = getMinQuery(rightChild, mid + 1, r, from, to);
         return std::min(leftMin, rightMin);
     }
 
-    T getSum(const NodePtr<T>& current, int from, int to) {
-        if (current == nullptr) {
+    T getSumQuery(int node, int l, int r, int from, int to) const {
+        if (to < l || from > r) {
             return 0;
         }
 
-        if (current->r < from || current->l > to) {
-            return 0;
+        if (from <= l && r <= to) {
+            return tree[node].sum;
         }
 
-        if (current->l >= from && current->r <= to) {
-            return current->sum;
-        }
+        int mid = l + (r - l) / 2;
+        int leftChild = 2 * node + 1;
+        int rightChild = 2 * node + 2;
 
-        T leftSum = getSum(current->left, from, to);
-        T rightSum = getSum(current->right, from, to);
+        T leftSum = getSumQuery(leftChild, l, mid, from, to);
+        T rightSum = getSumQuery(rightChild, mid + 1, r, from, to);
         return leftSum + rightSum;
     }
 };
