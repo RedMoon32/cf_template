@@ -228,10 +228,10 @@ private:
 
 
 #ifdef DBG_PRINT
-#define DBG_OUT(...) DebugPrint(#__VA_ARGS__, __VA_ARGS__)
+#define DBG_OUT(...) DBG_OUTL("====", __VA_ARGS__)
 #define DBG_OUTL(label, ...) \
     cout << "=====" << label << "=====" << endl; \
-    DBG_OUT(__VA_ARGS__)
+    DebugPrint(#__VA_ARGS__, __VA_ARGS__)
 #else
 #define DBG_OUT(...)
 #define DBG_OUTL(label, ...)
