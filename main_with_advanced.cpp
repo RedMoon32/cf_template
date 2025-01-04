@@ -217,6 +217,101 @@ private:
     }
 };
 
+// DEBUG (DBG_OUT and DBG_OUTL macros to print variables
+
+
+#ifdef DBG_PRINT
+#define DBG_OUT(...) DebugPrint(#__VA_ARGS__, __VA_ARGS__)
+#define DBG_OUTL(label, ...) \
+    cout << "=====" << label << "=====" << endl; \
+    DBG_OUT(__VA_ARGS__)
+#else
+#define DBG_OUT(...)
+#define DBG_OUTL(label, ...)
+#endif
+
+// Base case: No arguments to print
+void DebugPrint(const string& names) {
+    cout << "\n";
+}
+
+// Helper to detect if a type is iterable
+template <typename T, typename = void>
+struct is_iterable : false_type {};
+
+// Specialization for iterable types
+template <typename T>
+struct is_iterable<T, void_t<decltype(begin(declval<T>())), decltype(end(declval<T>()))>> : true_type {};
+
+// Print function for iterable types
+template <typename T>
+enable_if_t<is_iterable<T>::value && !is_convertible_v<T, string>, ostream&>
+operator<<(ostream& os, const T& container) {
+    os << "[";
+    for (auto it = container.begin(); it != container.end(); ++it) {
+        if (it != container.begin()) os << ", ";
+        os << *it;
+    }
+    os << "]";
+    return os;
+}
+
+// Fallback for unprintable types
+template <typename T>
+enable_if_t<!is_iterable<T>::value && !is_arithmetic_v<T> && !is_convertible_v<T, string>, ostream&>
+operator<<(ostream& os, const T&) {
+    os << "UNPRINTABLE TYPE";
+    return os;
+}
+
+// Variadic template to handle multiple variables
+template<typename T, typename... Args>
+void DebugPrint(const string& names, T&& first, Args&&... rest) {
+    istringstream iss(names);
+    string varName;
+
+    vector<string> varNames;
+    while (getline(iss, varName, ',')) {
+        varName.erase(0, varName.find_first_not_of(" "));
+        varName.erase(varName.find_last_not_of(" ") + 1);
+        varNames.push_back(varName);
+    }
+
+    cout << varNames[0] << " = " << first << endl;
+
+    if constexpr (sizeof...(rest) > 0) {
+        DebugPrint(accumulate(next(varNames.begin()), varNames.end(), string(), [](const string& a, const string& b) { return a + (a.length() > 0 ? ", " : "") + b; }), forward<Args>(rest)...);
+    }
+}
+
+// Example:
+    // int x = 10;
+    // string y = "hello";
+    // vector<int> z = {1, 4, 2, 4};
+
+    // // Print with label
+    // DBG_OUTL("init", x, y);
+
+    // // Print without label
+    // DBG_OUT(z);
+
+    // for (int i = 0; i < 10; i++) {
+    //     int b = i + 10;
+    //     DBG_OUTL("loop", i, b);
+    // }
+
+    // Out:
+    //=====init=====
+    //x = 10
+    //y = hello
+    //==============
+    //z = [1, 4, 2, 4]
+    //=====loop=====
+    //i = 0
+    //b = 10
+    
+
+
 // your solution here
 void solution()
 {
@@ -224,7 +319,7 @@ void solution()
     cin >> n;
 
     cout << n << endl;
-    
+    DBG_OUT(n);
     // your solution here
 }
 
