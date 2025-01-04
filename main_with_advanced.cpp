@@ -241,9 +241,17 @@ struct is_iterable : false_type {};
 template <typename T>
 struct is_iterable<T, void_t<decltype(begin(declval<T>())), decltype(end(declval<T>()))>> : true_type {};
 
-// Print function for iterable types
+// Helper to detect if a type is a map-like container
+template <typename T, typename = void>
+struct is_map : false_type {};
+
+// Specialization for map-like containers
 template <typename T>
-enable_if_t<is_iterable<T>::value && !is_convertible_v<T, string>, ostream&>
+struct is_map<T, enable_if_t<is_same_v<typename T::value_type, pair<const typename T::key_type, typename T::mapped_type>>>> : true_type {};
+
+// Print function for iterable types (non-map)
+template <typename T>
+enable_if_t<is_iterable<T>::value && !is_map<T>::value && !is_convertible_v<T, string>, ostream&>
 operator<<(ostream& os, const T& container) {
     os << "[";
     for (auto it = container.begin(); it != container.end(); ++it) {
@@ -251,6 +259,19 @@ operator<<(ostream& os, const T& container) {
         os << *it;
     }
     os << "]";
+    return os;
+}
+
+// Print function for map-like containers
+template <typename T>
+enable_if_t<is_map<T>::value, ostream&>
+operator<<(ostream& os, const T& container) {
+    os << "{";
+    for (auto it = container.begin(); it != container.end(); ++it) {
+        if (it != container.begin()) os << ", ";
+        os << it->first << ": " << it->second;
+    }
+    os << "}";
     return os;
 }
 
@@ -281,6 +302,7 @@ void DebugPrint(const string& names, T&& first, Args&&... rest) {
         DebugPrint(accumulate(next(varNames.begin()), varNames.end(), string(), [](const string& a, const string& b) { return a + (a.length() > 0 ? ", " : "") + b; }), forward<Args>(rest)...);
     }
 }
+
 
 // Example:
     // int x = 10;
@@ -316,7 +338,6 @@ void solution()
     int n;
     cin >> n;
 
-    DBG_OUT(n);
     cout << n << endl;
     
     // your solution here
