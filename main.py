@@ -88,8 +88,6 @@ seti getseti(vi& v) {
     # Segment Tree code if needed
     if include_segment_tree:
         cpp_code += R"""
-#include <bits/stdc++.h>
-#include <limits>
 
 template<typename T>
 struct Node
