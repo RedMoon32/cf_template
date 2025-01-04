@@ -341,7 +341,6 @@ void solution()
     cout << n << endl;
     
     // your solution here
-}
 
 int main(int argc, char* argv[]) {
     // Set input/output from file if arguments are passed
